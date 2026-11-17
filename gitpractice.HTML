@@ -1,0 +1,1725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HR Management System</title>
+
+<style>
+:root {
+    --navy: #102b50;
+    --blue: #2563eb;
+    --light: #f3f6fb;
+    --border: #e2e8f0;
+    --text: #172b4d;
+    --muted: #64748b;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: var(--light);
+    color: var(--text);
+}
+
+button, input, select {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+.topbar {
+    height: 66px;
+    background: var(--navy);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 25px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.brand-icon {
+    font-size: 29px;
+}
+
+.top-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    font-size: 14px;
+}
+
+.menu-button {
+    display: none;
+    background: transparent;
+    color: white;
+    border: 0;
+    font-size: 25px;
+}
+
+.sidebar {
+    width: 245px;
+    position: fixed;
+    top: 66px;
+    bottom: 0;
+    left: 0;
+    background: var(--navy);
+    padding: 15px 10px;
+    overflow-y: auto;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    border: 0;
+    color: #dce8fa;
+    background: transparent;
+    text-align: left;
+    padding: 14px 13px;
+    margin-bottom: 5px;
+    border-radius: 7px;
+    font-size: 14px;
+}
+
+.nav-item:hover,
+.nav-item.active {
+    background: var(--blue);
+    color: white;
+}
+
+.nav-icon {
+    width: 22px;
+    font-size: 19px;
+    text-align: center;
+}
+
+.main {
+    margin-left: 245px;
+    padding: 91px 24px 25px;
+    min-height: 100vh;
+}
+
+.page-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-bottom: 23px;
+}
+
+.page-heading h1 {
+    font-size: 27px;
+    margin-bottom: 6px;
+}
+
+.page-heading p {
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.button {
+    border: none;
+    border-radius: 6px;
+    background: var(--blue);
+    color: white;
+    padding: 10px 15px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.button:hover {
+    background: #1d4ed8;
+}
+
+.button.secondary {
+    background: #64748b;
+}
+
+.button.danger {
+    background: #dc2626;
+}
+
+.button.success {
+    background: #15803d;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 15px;
+    margin-bottom: 22px;
+}
+
+.stat-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    padding: 19px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 2px 5px #0f172a08;
+}
+
+.stat-icon {
+    height: 52px;
+    width: 52px;
+    min-width: 52px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    font-size: 25px;
+    background: #dbeafe;
+}
+
+.stat-card:nth-child(2) .stat-icon {
+    background: #dcfce7;
+}
+
+.stat-card:nth-child(3) .stat-icon {
+    background: #ede9fe;
+}
+
+.stat-card:nth-child(4) .stat-icon {
+    background: #ffedd5;
+}
+
+.stat-label {
+    color: var(--muted);
+    font-size: 13px;
+    margin-bottom: 8px;
+}
+
+.stat-value {
+    font-size: 27px;
+    font-weight: 700;
+}
+
+.grid-three {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 18px;
+    min-width: 0;
+    margin-bottom: 18px;
+}
+
+.card h3 {
+    font-size: 16px;
+    margin-bottom: 18px;
+}
+
+.bar-chart {
+    height: 210px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-around;
+    gap: 8px;
+    border-bottom: 1px solid #cbd5e1;
+    padding: 12px 5px 0;
+}
+
+.bar-column {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    flex: 1;
+    min-width: 0;
+}
+
+.bar {
+    width: min(30px, 85%);
+    min-height: 3px;
+    background: linear-gradient(#3b82f6, #2563eb);
+    border-radius: 4px 4px 0 0;
+}
+
+.bar-label {
+    height: 39px;
+    padding-top: 8px;
+    font-size: 10px;
+    color: var(--muted);
+    text-align: center;
+    overflow-wrap: anywhere;
+}
+
+.donut-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 17px;
+    min-height: 210px;
+    flex-wrap: wrap;
+}
+
+.donut {
+    width: 155px;
+    height: 155px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: conic-gradient(
+        #2563eb 0 36%,
+        #f97316 36% 52%,
+        #22c55e 52% 65%,
+        #8b5cf6 65% 76%,
+        #ec4899 76% 84%,
+        #94a3b8 84% 100%
+    );
+}
+
+.donut-hole {
+    width: 95px;
+    height: 95px;
+    border-radius: 50%;
+    background: white;
+    display: grid;
+    place-items: center;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.legend {
+    font-size: 12px;
+    line-height: 2.1;
+}
+
+.legend span {
+    display: inline-block;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    margin-right: 6px;
+}
+
+.salary-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.salary-row {
+    display: grid;
+    grid-template-columns: 72px 1fr 65px;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+}
+
+.track {
+    height: 12px;
+    background: #e2e8f0;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.fill {
+    height: 100%;
+    background: #3b82f6;
+    border-radius: 10px;
+}
+
+.table-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 17px;
+    margin-bottom: 20px;
+}
+
+.table-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 17px;
+}
+
+.table-heading h3 {
+    font-size: 17px;
+}
+
+.toolbar {
+    display: flex;
+    gap: 9px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+}
+
+.input {
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    padding: 10px 11px;
+    outline: none;
+    background: white;
+    color: var(--text);
+    min-width: 0;
+}
+
+.input:focus {
+    border-color: var(--blue);
+    box-shadow: 0 0 0 2px #2563eb15;
+}
+
+.search-input {
+    width: 260px;
+}
+
+.table-wrap {
+    width: 100%;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+th {
+    background: #eff4fa;
+    color: #334155;
+    text-align: left;
+    font-weight: 700;
+    padding: 13px 11px;
+}
+
+td {
+    padding: 13px 11px;
+    border-bottom: 1px solid #e8edf4;
+}
+
+tbody tr:hover {
+    background: #f8fafc;
+}
+
+.badge {
+    padding: 5px 9px;
+    background: #dcfce7;
+    color: #166534;
+    border-radius: 20px;
+    font-size: 11px;
+}
+
+.action-btn {
+    background: transparent;
+    border: 0;
+    margin-right: 8px;
+    color: var(--blue);
+    font-weight: 600;
+}
+
+.action-btn.delete {
+    color: #dc2626;
+}
+
+.footer {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding: 18px 0;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.empty {
+    padding: 35px;
+    text-align: center;
+    color: var(--muted);
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.form-group label {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.form-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.message {
+    padding: 12px;
+    background: #dcfce7;
+    color: #166534;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    font-size: 13px;
+}
+
+.hidden {
+    display: none !important;
+}
+
+@media (max-width: 1100px) {
+    .stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .grid-three {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 700px) {
+    .topbar {
+        padding: 0 14px;
+    }
+
+    .brand {
+        font-size: 15px;
+    }
+
+    .brand-icon {
+        font-size: 23px;
+    }
+
+    .top-right {
+        display: none;
+    }
+
+    .menu-button {
+        display: block;
+    }
+
+    .sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.2s;
+        z-index: 20;
+        width: 245px;
+    }
+
+    .sidebar.open {
+        transform: translateX(0);
+    }
+
+    .main {
+        margin-left: 0;
+        padding: 86px 13px 20px;
+    }
+
+    .stats {
+        grid-template-columns: 1fr 1fr;
+        gap: 9px;
+    }
+
+    .stat-card {
+        padding: 12px;
+        gap: 8px;
+    }
+
+    .stat-icon {
+        width: 38px;
+        height: 38px;
+        min-width: 38px;
+        font-size: 18px;
+    }
+
+    .stat-value {
+        font-size: 21px;
+    }
+
+    .stat-label {
+        font-size: 11px;
+    }
+
+    .page-heading h1 {
+        font-size: 23px;
+    }
+
+    .search-input {
+        width: 100%;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+    <div class="brand">
+        <button class="menu-button" onclick="toggleMenu()">☰</button>
+        <span class="brand-icon">👥</span>
+        <span>HR Management System</span>
+    </div>
+
+    <div class="top-right">
+        <span>Welcome, Admin</span>
+        <span>👤</span>
+        <span>Oracle HR</span>
+    </div>
+</header>
+
+<aside class="sidebar" id="sidebar">
+
+    <button class="nav-item active" onclick="navigate('dashboard',this)">
+        <span class="nav-icon">⌂</span> Dashboard
+    </button>
+
+    <button class="nav-item" onclick="navigate('employees',this)">
+        <span class="nav-icon">👤</span> Employee Management
+    </button>
+
+    <button class="nav-item" onclick="navigate('departments',this)">
+        <span class="nav-icon">🏢</span> Department Management
+    </button>
+
+    <button class="nav-item" onclick="navigate('jobs',this)">
+        <span class="nav-icon">💼</span> Job Management
+    </button>
+
+    <button class="nav-item" onclick="navigate('salary',this)">
+        <span class="nav-icon">📊</span> Salary Reports
+    </button>
+
+    <button class="nav-item" onclick="navigate('history',this)">
+        <span class="nav-icon">🕘</span> Job History
+    </button>
+
+    <button class="nav-item" onclick="navigate('locations',this)">
+        <span class="nav-icon">📍</span> Locations & Countries
+    </button>
+
+    <button class="nav-item" onclick="navigate('audit',this)">
+        <span class="nav-icon">📋</span> Audit Log
+    </button>
+
+    <button class="nav-item" onclick="navigate('about',this)">
+        <span class="nav-icon">⚙</span> Project Information
+    </button>
+
+</aside>
+
+<main class="main">
+
+    <div id="message-area"></div>
+
+    <section id="page-content"></section>
+
+    <footer class="footer">
+        <span>Oracle HR Management System | PL/SQL 11g Project</span>
+        <span>Employee Management & HR Analytics</span>
+    </footer>
+
+</main>
+
+<script>
+/*
+  STANDALONE FRONTEND DEMO.
+
+  This version uses local sample data.
+  It does not connect to Oracle Database.
+
+  Your original Oracle HR tables are not changed.
+*/
+
+const initialEmployees = [
+    {id:100,first:"Steven",last:"King",email:"SKING@oracle.com",phone:"515.123.4567",hire:"2003-06-17",job:"AD_PRES",salary:24000,commission:0,manager:"",dept:90},
+    {id:101,first:"Neena",last:"Kochhar",email:"NKOCHHAR@oracle.com",phone:"515.123.4568",hire:"2005-09-21",job:"AD_VP",salary:17000,commission:0,manager:100,dept:90},
+    {id:102,first:"Lex",last:"De Haan",email:"LDEHAAN@oracle.com",phone:"515.123.4569",hire:"2001-01-13",job:"AD_VP",salary:17000,commission:0,manager:100,dept:90},
+    {id:103,first:"Alexander",last:"Hunold",email:"AHUNOLD@oracle.com",phone:"590.423.4567",hire:"2006-01-03",job:"IT_PROG",salary:9000,commission:0,manager:102,dept:60},
+    {id:104,first:"Bruce",last:"Ernst",email:"BERNST@oracle.com",phone:"590.423.4568",hire:"2007-05-21",job:"IT_PROG",salary:6000,commission:0,manager:103,dept:60},
+    {id:105,first:"David",last:"Austin",email:"DAUSTIN@oracle.com",phone:"590.423.4569",hire:"2005-06-25",job:"IT_PROG",salary:4800,commission:0,manager:103,dept:60},
+    {id:106,first:"Valli",last:"Pataballa",email:"VPATABAL@oracle.com",phone:"590.423.4560",hire:"2006-02-05",job:"IT_PROG",salary:4800,commission:0,manager:103,dept:60},
+    {id:107,first:"Diana",last:"Lorentz",email:"DLORENTZ@oracle.com",phone:"590.423.5567",hire:"2007-02-07",job:"IT_PROG",salary:4200,commission:0,manager:103,dept:60},
+    {id:108,first:"Nancy",last:"Greenberg",email:"NGREENBE@oracle.com",phone:"515.124.4569",hire:"2002-08-17",job:"FI_MGR",salary:12008,commission:0,manager:101,dept:100},
+    {id:109,first:"Daniel",last:"Faviet",email:"DFAVIET@oracle.com",phone:"515.124.4169",hire:"2002-08-16",job:"FI_ACCOUNT",salary:9000,commission:0,manager:108,dept:100},
+    {id:110,first:"John",last:"Chen",email:"JCHEN@oracle.com",phone:"515.124.4269",hire:"2005-09-28",job:"FI_ACCOUNT",salary:8200,commission:0,manager:108,dept:100},
+    {id:111,first:"Ismael",last:"Sciarra",email:"ISCIARRA@oracle.com",phone:"515.124.4369",hire:"2005-09-30",job:"FI_ACCOUNT",salary:7700,commission:0,manager:108,dept:100},
+    {id:112,first:"Jose Manuel",last:"Urman",email:"JMURMAN@oracle.com",phone:"515.124.4469",hire:"2006-03-07",job:"FI_ACCOUNT",salary:7800,commission:0,manager:108,dept:100},
+    {id:113,first:"Luis",last:"Popp",email:"LPOPP@oracle.com",phone:"515.124.4567",hire:"2007-12-07",job:"FI_ACCOUNT",salary:6900,commission:0,manager:108,dept:100},
+    {id:114,first:"Den",last:"Raphaely",email:"DRAPHEAL@oracle.com",phone:"515.127.4561",hire:"2002-12-07",job:"PU_MAN",salary:11000,commission:0,manager:100,dept:30},
+    {id:115,first:"Alexander",last:"Khoo",email:"AKHOO@oracle.com",phone:"515.127.4562",hire:"2003-05-18",job:"PU_CLERK",salary:3100,commission:0,manager:114,dept:30}
+];
+
+const employees = JSON.parse(
+    localStorage.getItem("hr_demo_employees") || "null"
+) || initialEmployees;
+
+const departments = [
+    {id:10,name:"Administration",manager:200,location:1700},
+    {id:20,name:"Marketing",manager:201,location:1800},
+    {id:30,name:"Purchasing",manager:114,location:1700},
+    {id:40,name:"Human Resources",manager:203,location:2400},
+    {id:50,name:"Shipping",manager:121,location:1500},
+    {id:60,name:"IT",manager:103,location:1400},
+    {id:70,name:"Public Relations",manager:204,location:2700},
+    {id:80,name:"Sales",manager:145,location:2500},
+    {id:90,name:"Executive",manager:100,location:1700},
+    {id:100,name:"Finance",manager:108,location:1700},
+    {id:110,name:"Accounting",manager:205,location:1700}
+];
+
+const jobs = [
+    {id:"AD_PRES",title:"President",min:20000,max:40000},
+    {id:"AD_VP",title:"Administration Vice President",min:15000,max:30000},
+    {id:"IT_PROG",title:"Programmer",min:4000,max:10000},
+    {id:"FI_MGR",title:"Finance Manager",min:8200,max:16000},
+    {id:"FI_ACCOUNT",title:"Accountant",min:4200,max:9000},
+    {id:"PU_MAN",title:"Purchasing Manager",min:8000,max:15000},
+    {id:"PU_CLERK",title:"Purchasing Clerk",min:2500,max:5500},
+    {id:"SA_MAN",title:"Sales Manager",min:10000,max:20000},
+    {id:"SA_REP",title:"Sales Representative",min:6000,max:12000},
+    {id:"ST_CLERK",title:"Stock Clerk",min:2000,max:5000},
+    {id:"ST_MAN",title:"Stock Manager",min:5500,max:8500},
+    {id:"AD_ASST",title:"Administration Assistant",min:3000,max:6000}
+];
+
+const locations = [
+    {id:1400,city:"Southlake",country:"US"},
+    {id:1500,city:"South San Francisco",country:"US"},
+    {id:1700,city:"Seattle",country:"US"},
+    {id:1800,city:"Toronto",country:"CA"},
+    {id:2400,city:"London",country:"UK"},
+    {id:2500,city:"Oxford",country:"UK"},
+    {id:2700,city:"Munich",country:"DE"}
+];
+
+const countries = [
+    {id:"US",name:"United States",region:"Americas"},
+    {id:"CA",name:"Canada",region:"Americas"},
+    {id:"UK",name:"United Kingdom",region:"Europe"},
+    {id:"DE",name:"Germany",region:"Europe"},
+    {id:"IN",name:"India",region:"Asia"}
+];
+
+const jobHistory = [
+    {id:101,start:"1997-09-21",end:"2001-10-27",job:"AC_ACCOUNT",dept:110},
+    {id:101,start:"2001-10-28",end:"2005-09-20",job:"AD_ASST",dept:90},
+    {id:102,start:"1998-01-13",end:"2001-07-24",job:"IT_PROG",dept:60},
+    {id:114,start:"1999-03-24",end:"2002-12-06",job:"ST_CLERK",dept:50}
+];
+
+const auditLogs = [];
+
+function saveEmployees() {
+    localStorage.setItem("hr_demo_employees", JSON.stringify(employees));
+}
+
+function money(value) {
+    return "$" + Number(value || 0).toLocaleString("en-US");
+}
+
+function escapeHTML(value) {
+    return String(value ?? "").replace(/[&<>"']/g, function(char) {
+        return {
+            "&":"&amp;",
+            "<":"&lt;",
+            ">":"&gt;",
+            '"':"&quot;",
+            "'":"&#39;"
+        }[char];
+    });
+}
+
+function deptName(id) {
+    const d = departments.find(x => x.id == id);
+    return d ? d.name : "Department " + id;
+}
+
+function employeeName(id) {
+    const e = employees.find(x => x.id == id);
+    return e ? e.first + " " + e.last : (id || "N/A");
+}
+
+function jobTitle(id) {
+    const j = jobs.find(x => x.id === id);
+    return j ? j.title : id;
+}
+
+function toggleMenu() {
+    document.getElementById("sidebar").classList.toggle("open");
+}
+
+function navigate(page, button) {
+    document.querySelectorAll(".nav-item").forEach(item => {
+        item.classList.remove("active");
+    });
+
+    if (button) button.classList.add("active");
+
+    document.getElementById("sidebar").classList.remove("open");
+
+    const content = document.getElementById("page-content");
+
+    const pages = {
+        dashboard: renderDashboard,
+        employees: renderEmployees,
+        departments: renderDepartments,
+        jobs: renderJobs,
+        salary: renderSalary,
+        history: renderHistory,
+        locations: renderLocations,
+        audit: renderAudit,
+        about: renderAbout
+    };
+
+    if (pages[page]) {
+        content.innerHTML = pages[page]();
+    }
+
+    if (page === "employees") {
+        renderEmployeeTable();
+    }
+
+    if (page === "dashboard") {
+        renderRecentEmployees();
+    }
+}
+
+function heading(title, subtitle, action = "") {
+    return `
+        <div class="page-heading">
+            <div>
+                <h1>${title}</h1>
+                <p>${subtitle}</p>
+            </div>
+            ${action}
+        </div>
+    `;
+}
+
+function renderDashboard() {
+    const totalSalary = employees.reduce((sum,e) => sum + Number(e.salary),0);
+    const averageSalary = employees.length ? totalSalary / employees.length : 0;
+
+    const deptCount = new Set(employees.map(e => e.dept)).size;
+
+    const departmentTotals = {};
+    employees.forEach(e => {
+        departmentTotals[e.dept] = (departmentTotals[e.dept] || 0) + 1;
+    });
+
+    const topDepartments = Object.entries(departmentTotals)
+        .sort((a,b) => b[1]-a[1])
+        .slice(0,8);
+
+    const maxCount = Math.max(1,...topDepartments.map(x => x[1]));
+
+    const salaryJobs = {};
+    employees.forEach(e => {
+        salaryJobs[e.job] = (salaryJobs[e.job] || 0) + 1;
+    });
+
+    const topJobs = Object.entries(salaryJobs)
+        .sort((a,b) => b[1]-a[1])
+        .slice(0,5);
+
+    const maxJob = Math.max(1,...topJobs.map(x => x[1]));
+
+    return `
+        ${heading("Dashboard","Overview of Employee Management and HR Analytics")}
+
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-icon">👥</div>
+                <div>
+                    <div class="stat-label">Employees in Demo</div>
+                    <div class="stat-value">${employees.length}</div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">🏢</div>
+                <div>
+                    <div class="stat-label">Departments</div>
+                    <div class="stat-value">${deptCount}</div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">💼</div>
+                <div>
+                    <div class="stat-label">Job Titles</div>
+                    <div class="stat-value">${new Set(employees.map(e => e.job)).size}</div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">💰</div>
+                <div>
+                    <div class="stat-label">Average Salary</div>
+                    <div class="stat-value" style="font-size:23px">${money(Math.round(averageSalary))}</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid-three">
+            <div class="card">
+                <h3>Employees by Department</h3>
+                <div class="bar-chart">
+                    ${topDepartments.map(([id,count]) => `
+                        <div class="bar-column" title="${escapeHTML(deptName(id))}: ${count}">
+                            <div style="font-size:10px;margin-bottom:5px">${count}</div>
+                            <div class="bar" style="height:${Math.max(3,count/maxCount*70)}%"></div>
+                            <div class="bar-label">${escapeHTML(deptName(id))}</div>
+                        </div>
+                    `).join("")}
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Employees by Job</h3>
+                <div class="salary-bars">
+                    ${topJobs.map(([id,count]) => `
+                        <div class="salary-row">
+                            <span>${escapeHTML(id)}</span>
+                            <div class="track">
+                                <div class="fill" style="width:${count/maxJob*100}%"></div>
+                            </div>
+                            <span>${count} employees</span>
+                        </div>
+                    `).join("")}
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Salary Overview</h3>
+                <div style="font-size:13px;color:#64748b;margin-bottom:16px">
+                    Based on the demo employee records.
+                </div>
+
+                <div style="font-size:14px;margin-bottom:15px">
+                    Total salary
+                    <strong style="float:right">${money(totalSalary)}</strong>
+                </div>
+
+                <div style="font-size:14px;margin-bottom:15px">
+                    Average salary
+                    <strong style="float:right">${money(Math.round(averageSalary))}</strong>
+                </div>
+
+                <div style="font-size:14px;margin-bottom:15px">
+                    Highest salary
+                    <strong style="float:right">${money(Math.max(0,...employees.map(e => Number(e.salary))) )}</strong>
+                </div>
+
+                <div style="font-size:14px">
+                    Lowest salary
+                    <strong style="float:right">${money(employees.length ? Math.min(...employees.map(e => Number(e.salary))) : 0)}</strong>
+                </div>
+
+                <button class="button" style="margin-top:22px" onclick="navigate('salary')">
+                    View Salary Reports
+                </button>
+            </div>
+        </div>
+
+        <div class="table-card">
+            <div class="table-heading">
+                <h3>Recent Employees</h3>
+                <button class="button" onclick="navigate('employees')">View All Employees</button>
+            </div>
+            <div id="recent-table"></div>
+        </div>
+    `;
+}
+
+function renderRecentEmployees() {
+    const recent = [...employees]
+        .sort((a,b) => new Date(b.hire)-new Date(a.hire))
+        .slice(0,5);
+
+    document.getElementById("recent-table").innerHTML = employeeTable(recent,false);
+}
+
+function employeeTable(records, showActions = true) {
+    if (!records.length) {
+        return `<div class="empty">No employee records found.</div>`;
+    }
+
+    return `
+        <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Employee ID</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Hire Date</th>
+                    <th>Job ID</th>
+                    <th>Department</th>
+                    <th>Salary</th>
+                    ${showActions ? "<th>Actions</th>" : ""}
+                </tr>
+            </thead>
+            <tbody>
+                ${records.map(e => `
+                    <tr>
+                        <td>${e.id}</td>
+                        <td>${escapeHTML(e.first)}</td>
+                        <td>${escapeHTML(e.last)}</td>
+                        <td>${escapeHTML(e.email)}</td>
+                        <td>${escapeHTML(e.hire)}</td>
+                        <td>${escapeHTML(e.job)}</td>
+                        <td>${escapeHTML(deptName(e.dept))}</td>
+                        <td>${money(e.salary)}</td>
+                        ${showActions ? `
+                            <td>
+                                <button class="action-btn" onclick="editEmployee(${e.id})">Edit</button>
+                                <button class="action-btn delete" onclick="deleteEmployee(${e.id})">Delete</button>
+                            </td>
+                        ` : ""}
+                    </tr>
+                `).join("")}
+            </tbody>
+        </table>
+        </div>
+    `;
+}
+
+function renderEmployees() {
+    return `
+        ${heading(
+            "Employee Management",
+            "View and manage employee records",
+            `<button class="button" onclick="showEmployeeForm()">+ Add Employee</button>`
+        )}
+
+        <div class="table-card">
+            <div class="toolbar">
+                <input class="input search-input" id="employee-search"
+                    placeholder="Search name, ID, email or job..."
+                    oninput="renderEmployeeTable()">
+
+                <select class="input" id="department-filter" onchange="renderEmployeeTable()">
+                    <option value="">All Departments</option>
+                    ${departments.map(d => `
+                        <option value="${d.id}">${escapeHTML(d.name)}</option>
+                    `).join("")}
+                </select>
+
+                <button class="button secondary" onclick="exportEmployees()">Export CSV</button>
+            </div>
+
+            <div id="employee-table"></div>
+        </div>
+
+        <div id="employee-form-container"></div>
+    `;
+}
+
+function renderEmployeeTable() {
+    const table = document.getElementById("employee-table");
+    if (!table) return;
+
+    const search = (document.getElementById("employee-search")?.value || "").toLowerCase();
+    const dept = document.getElementById("department-filter")?.value || "";
+
+    const records = employees.filter(e => {
+        const text = [
+            e.id,e.first,e.last,e.email,e.job,deptName(e.dept)
+        ].join(" ").toLowerCase();
+
+        return text.includes(search) && (!dept || String(e.dept) === dept);
+    });
+
+    table.innerHTML = employeeTable(records,true);
+}
+
+function showEmployeeForm(id = null) {
+    const existing = id === null ? null : employees.find(e => e.id === id);
+
+    const container = document.getElementById("employee-form-container");
+
+    if (!container) return;
+
+    container.innerHTML = `
+        <div class="card" id="employee-form">
+            <h3>${existing ? "Edit Employee" : "Add Employee"}</h3>
+
+            <form onsubmit="saveEmployee(event,${existing ? existing.id : "null"})">
+                <div class="form-grid">
+
+                    <div class="form-group">
+                        <label>Employee ID</label>
+                        <input class="input" name="id" type="number"
+                            value="${existing ? existing.id : Math.max(1000,...employees.map(e => e.id))+1}"
+                            ${existing ? "readonly" : "required"} required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>First Name</label>
+                        <input class="input" name="first"
+                            value="${escapeHTML(existing?.first || "")}" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Last Name</label>
+                        <input class="input" name="last"
+                            value="${escapeHTML(existing?.last || "")}" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input class="input" name="email" type="email"
+                            value="${escapeHTML(existing?.email || "")}" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <input class="input" name="phone"
+                            value="${escapeHTML(existing?.phone || "")}">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Hire Date</label>
+                        <input class="input" name="hire" type="date"
+                            value="${existing ? existing.hire : new Date().toISOString().slice(0,10)}"
+                            required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Job</label>
+                        <select class="input" name="job" required>
+                            ${jobs.map(j => `
+                                <option value="${j.id}" ${existing?.job === j.id ? "selected" : ""}>
+                                    ${j.id} - ${escapeHTML(j.title)}
+                                </option>
+                            `).join("")}
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Salary</label>
+                        <input class="input" name="salary" type="number" min="0"
+                            value="${existing ? existing.salary : ""}" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Department</label>
+                        <select class="input" name="dept" required>
+                            ${departments.map(d => `
+                                <option value="${d.id}" ${existing?.dept == d.id ? "selected" : ""}>
+                                    ${d.id} - ${escapeHTML(d.name)}
+                                </option>
+                            `).join("")}
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Manager ID (optional)</label>
+                        <input class="input" name="manager" type="number"
+                            value="${existing?.manager || ""}">
+                    </div>
+
+                </div>
+
+                <div class="form-actions">
+                    <button class="button" type="submit">Save Employee</button>
+                    <button class="button secondary" type="button"
+                        onclick="document.getElementById('employee-form-container').innerHTML=''">
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+    `;
+
+    container.scrollIntoView({behavior:"smooth",block:"start"});
+}
+
+function editEmployee(id) {
+    showEmployeeForm(id);
+}
+
+function saveEmployee(event, oldId) {
+    event.preventDefault();
+
+    const form = event.target;
+    const data = new FormData(form);
+
+    const id = Number(data.get("id"));
+
+    if (oldId === null && employees.some(e => e.id === id)) {
+        alert("This Employee ID already exists.");
+        return;
+    }
+
+    const email = String(data.get("email")).trim();
+
+    if (employees.some(e => e.email.toLowerCase() === email.toLowerCase() && e.id !== oldId)) {
+        alert("This email already exists.");
+        return;
+    }
+
+    const employee = {
+        id:id,
+        first:String(data.get("first")).trim(),
+        last:String(data.get("last")).trim(),
+        email:email,
+        phone:String(data.get("phone")).trim(),
+        hire:String(data.get("hire")),
+        job:String(data.get("job")),
+        salary:Number(data.get("salary")),
+        commission:0,
+        manager:data.get("manager") ? Number(data.get("manager")) : "",
+        dept:Number(data.get("dept"))
+    };
+
+    if (oldId !== null) {
+        const index = employees.findIndex(e => e.id === oldId);
+        if (index === -1) return;
+        employees[index] = employee;
+        auditLogs.unshift({
+            time:new Date().toLocaleString(),
+            action:"UPDATE",
+            details:"Updated employee " + id
+        });
+    } else {
+        employees.push(employee);
+        auditLogs.unshift({
+            time:new Date().toLocaleString(),
+            action:"INSERT",
+            details:"Added employee " + id
+        });
+    }
+
+    saveEmployees();
+
+    document.getElementById("message-area").innerHTML =
+        `<div class="message">Employee record saved successfully in this browser demo.</div>`;
+
+    navigate("employees");
+
+    window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function deleteEmployee(id) {
+    if (!confirm("Are you sure you want to delete employee " + id + " from this browser demo?")) {
+        return;
+    }
+
+    const index = employees.findIndex(e => e.id === id);
+    if (index === -1) return;
+
+    employees.splice(index,1);
+    saveEmployees();
+
+    auditLogs.unshift({
+        time:new Date().toLocaleString(),
+        action:"DELETE",
+        details:"Deleted employee " + id
+    });
+
+    navigate("employees");
+
+    document.getElementById("message-area").innerHTML =
+        `<div class="message">Employee removed from the browser demo.</div>`;
+}
+
+function exportEmployees() {
+    const headers = [
+        "EMPLOYEE_ID","FIRST_NAME","LAST_NAME","EMAIL",
+        "PHONE_NUMBER","HIRE_DATE","JOB_ID","SALARY","DEPARTMENT_ID"
+    ];
+
+    const rows = employees.map(e => [
+        e.id,e.first,e.last,e.email,e.phone,e.hire,e.job,e.salary,e.dept
+    ]);
+
+    const csv = [headers,...rows].map(row =>
+        row.map(v => `"${String(v ?? "").replace(/"/g,'""')}"`).join(",")
+    ).join("\r\n");
+
+    const blob = new Blob(["\uFEFF" + csv],{type:"text/csv;charset=utf-8;"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+
+    a.href = url;
+    a.download = "HR_Employees_Demo.csv";
+    a.click();
+
+    URL.revokeObjectURL(url);
+}
+
+function renderDepartments() {
+    return `
+        ${heading("Department Management","Department details and employee counts")}
+
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-icon">🏢</div>
+                <div>
+                    <div class="stat-label">Demo Departments</div>
+                    <div class="stat-value">${departments.length}</div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">👥</div>
+                <div>
+                    <div class="stat-label">Employees</div>
+                    <div class="stat-value">${employees.length}</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-card">
+            <div class="table-heading">
+                <h3>Department Details</h3>
+                <input class="input search-input" id="dept-search"
+                    placeholder="Search departments..."
+                    oninput="filterSimpleTable('dept-search','dept-table')">
+            </div>
+
+            <div class="table-wrap" id="dept-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Department ID</th>
+                            <th>Department Name</th>
+                            <th>Manager ID</th>
+                            <th>Location ID</th>
+                            <th>Employee Count</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${departments.map(d => `
+                            <tr>
+                                <td>${d.id}</td>
+                                <td>${escapeHTML(d.name)}</td>
+                                <td>${d.manager ?? "N/A"}</td>
+                                <td>${d.location}</td>
+                                <td>${employees.filter(e => e.dept == d.id).length}</td>
+                            </tr>
+                        `).join("")}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    `;
+}
+
+function renderJobs() {
+    return `
+        ${heading("Job Management","Job titles and salary ranges")}
+
+        <div class="table-card">
+            <div class="table-heading">
+                <h3>Job Details</h3>
+                <input class="input search-input" id="job-search"
+                    placeholder="Search job titles..."
+                    oninput="filterSimpleTable('job-search','job-table')">
+            </div>
+
+            <div class="table-wrap" id="job-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Job ID</th>
+                            <th>Job Title</th>
+                            <th>Minimum Salary</th>
+                            <th>Maximum Salary</th>
+                            <th>Demo Employees</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${jobs.map(j => `
+                            <tr>
+                                <td>${j.id}</td>
+                                <td>${escapeHTML(j.title)}</td>
+                                <td>${money(j.min)}</td>
+                                <td>${money(j.max)}</td>
+                                <td>${employees.filter(e => e.job === j.id).length}</td>
+                            </tr>
+                        `).join("")}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    `;
+}
+
+function renderSalary() {
+    const sorted = [...employees].sort((a,b) => b.salary-a.salary);
+    const distinctSalaries = [...new Set(employees.map(e => Number(e.salary)))]
+        .sort((a,b) => b-a);
+
+    return `
+        ${heading("Salary Reports","Salary ranking, averages and department analysis")}
+
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-icon">💰</div>
+                <div>
+                    <div class="stat-label">Total Salary</div>
+                    <div class="stat-value" style="font-size:21px">
+                        ${money(employees.reduce((s,e) => s+e.salary,0))}
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">📈</div>
+                <div>
+                    <div class="stat-label">Highest Salary</div>
+                    <div class="stat-value">${money(distinctSalaries[0] || 0)}</div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">📉</div>
+                <div>
+                    <div class="stat-label">Lowest Salary</div>
+                    <div class="stat-value">${money(distinctSalaries.length ? distinctSalaries[distinctSalaries.length-1] : 0)}</div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">🧮</div>
+                <div>
+                    <div class="stat-label">Distinct Salary Values</div>
+                    <div class="stat-value">${distinctSalaries.length}</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-card">
+            <div class="table-heading">
+                <h3>Top 3 Highest Distinct Salaries</h3>
+            </div>
+
+            <p style="font-size:13px;color:#64748b;margin-bottom:15px">
+                This report shows each of the three highest salary values only once.
+            </p>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr><th>Rank</th><th>Salary</th></tr>
+                    </thead>
+                    <tbody>
+                        ${distinctSalaries.slice(0,3).map((s,i) => `
+                            <tr><td>${i+1}</td><td>${money(s)}</td></tr>
+                        `).join("")}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="table-card">
+            <div class="table-heading">
+                <h3>Employee Salary Ranking</h3>
+                <input class="input search-input" id="salary-search"
+                    placeholder="Search employees..."
+                    oninput="filterSimpleTable('salary-search','salary-table')">
+            </div>
+
+            <div class="table-wrap" id="salary-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Employee ID</th>
+                            <th>Employee Name</th>
+                            <th>Department</th>
+                            <th>Salary</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${sorted.map((e,i) => `
+                            <tr>
+                                <td>${i+1}</td>
+                                <td>${e.id}</td>
+                                <td>${escapeHTML(e.first+" "+e.last)}</td>
+                                <td>${escapeHTML(deptName(e.dept))}</td>
+                                <td>${money(e.salary)}</td>
+                            </tr>
+                        `).join("")}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    `;
+}
+
+function renderHistory() {
+    return `
+        ${heading("Job History","Sample previous employee job assignments")}
+
+        <div class="table-card">
+            <div class="table-heading">
+                <h3>Job History Records</h3>
+                <input class="input search-input" id="history-search"
+                    placeholder="Search job history..."
+                    oninput="filterSimpleTable('history-search','history-table')">
+            </div>
+
+            <div class="table-wrap" id="history-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Employee ID</th>
+                            <th>Employee Name</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Previous Job ID</th>
+                            <th>Department</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${jobHistory.map(h => `
+                            <tr>
+                                <td>${h.id}</td>
+                                <td>${escapeHTML(employeeName(h.id))}</td>
+                                <td>${h.start}</td>
+                                <td>${h.end}</td>
+                                <td>${escapeHTML(h.job)}</td>
+                                <td>${escapeHTML(deptName(h.dept))}</td>
+                            </tr>
+                        `).join("")}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <p style="color:#64748b;font-size:12px">
+            These job history entries are demonstration data, not a live query of HR.JOB_HISTORY.
+        </p>
+    `;
+}
+
+function renderLocations() {
+    return `
+        ${heading("Locations & Countries","Office locations, countries and regions")}
+
+        <div class="table-card">
+            <div class="table-heading">
+                <h3>Office Locations</h3>
+                <input class="input search-input" id="location-search"
+                    placeholder="Search locations..."
+                    oninput="filterSimpleTable('location-search','location-table')">
+            </div>
+
+            <div class="table-wrap" id="location-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Location ID</th>
+                            <th>City</th>
+                            <th>Country Code</th>
+                            <th>Country</th>
+                            <th>Region</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${locations.map(l => {
+                            const c = countries.find(x => x.id === l.country) || {};
+                            return `
+                                <tr>
+                                    <td>${l.id}</td>
+                                    <td>${escapeHTML(l.city)}</td>
+                                    <td>${escapeHTML(l.country)}</td>
+                                    <td>${escapeHTML(c.name || "N/A")}</td>
+                                    <td>${escapeHTML(c.region || "N/A")}</td>
+                                </tr>
+                            `;
+                        }).join("")}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="table-card">
+            <div class="table-heading">
+                <h3>Countries & Regions</h3>
+            </div>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr><th>Country Code</th><th>Country Name</th><th>Region</th></tr>
+                    </thead>
+                    <tbody>
+                        ${countries.map(c => `
+                            <tr>
+                                <td>${escapeHTML(c.id)}</td>
+                                <td>${escapeHTML(c.name)}</td>
+                                <td>${escapeHTML(c.region)}</td>
+                            </tr>
+                        `).join("")}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    `;
+}
+
+function renderAudit() {
+    return `
+        ${heading("Audit Log","Browser-demo employee changes")}
+
+        <div class="table-card">
+            <div class="table-heading">
+                <h3>Recent Activity</h3>
+            </div>
+
+            ${auditLogs.length ? `
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Time</th><th>Action</th><th>Details</th></tr>
+                        </thead>
+                        <tbody>
+                            ${auditLogs.map(a => `
+                                <tr>
+                                    <td>${escapeHTML(a.time)}</td>
+                                    <td><span class="badge">${escapeHTML(a.action)}</span></td>
+                                    <td>${escapeHTML(a.details)}</td>
+                                </tr>
+                            `).join("")}
+                        </tbody>
+                    </table>
+                </div>
+            ` : `<div class="empty">No changes recorded in this session yet.</div>`}
+        </div>
+
+        <p style="color:#64748b;font-size:12px">
+            This is a frontend activity log. It is not an Oracle database audit table or database trigger.
+        </p>
+    `;
+}
+
+function renderAbout() {
+    return `
+        ${heading("Project Information","Employee Management & HR Analytics System")}
+
+        <div class="card">
+            <h3>Project Overview</h3>
+            <p style="line-height:1.9;color:#475569;font-size:14px">
+                This project demonstrates an HR dashboard interface using HTML, CSS and JavaScript.
+                It is designed to be connected later to an Oracle Database 11g backend using PL/SQL
+                procedures and a backend API.
+            </p>
+        </div>
+
+        <div class="card">
+            <h3>Technology Stack</h3>
+            <table>
+                <tbody>
+                    <tr><td>Frontend</td><td>HTML5, CSS3, JavaScript</td></tr>
+                    <tr><td>Database target</td><td>Oracle Database 11g XE</td></tr>
+                    <tr><td>Database schema</td><td>HR</td></tr>
+                    <tr><td>Backend (future integration)</td><td>Python Flask + python-oracledb + PL/SQL</td></tr>
+                    <tr><td>Current mode</td><td>Standalone browser demo</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="card">
+            <h3>HR Tables for Backend Integration</h3>
+            <p style="line-height:2;color:#475569;font-size:14px">
+                HR.EMPLOYEES<br>
+                HR.DEPARTMENTS<br>
+                HR.JOBS<br>
+                HR.JOB_HISTORY<br>
+                HR.LOCATIONS<br>
+                HR.COUNTRIES<br>
+                HR.REGIONS
+            </p>
+        </div>
+
+        <div class="card">
+            <h3>Demo Data</h3>
+            <p style="line-height:1.8;color:#64748b;font-size:13px">
+                Employee records added or edited here are stored in this browser's local storage.
+                They are not inserted into Oracle. Department, job, location and job-history records
+                are sample data. Do not use this demo to store confidential employee information.
+            </p>
+
+            <button class="button danger" onclick="resetDemo()">Reset Employee Demo Data</button>
+        </div>
+    `;
+}
+
+function filterSimpleTable(inputId, tableId) {
+    const input = document.getElementById(inputId);
+    const table = document.getElementById(tableId);
+
+    if (!input || !table) return;
+
+    const term = input.value.toLowerCase();
+
+    table.querySelectorAll("tbody tr").forEach(row => {
+        row.style.display = row.innerText.toLowerCase().includes(term) ? "" : "none";
+    });
+}
+
+function resetDemo() {
+    if (!confirm("Reset all employee demo changes and restore the original sample records?")) {
+        return;
+    }
+
+    localStorage.removeItem("hr_demo_employees");
+
+    employees.splice(0,employees.length,...initialEmployees);
+
+    auditLogs.length = 0;
+
+    navigate("dashboard");
+
+    document.getElementById("message-area").innerHTML =
+        `<div class="message">Demo employee records have been reset.</div>`;
+}
+
+/* Open the dashboard when the HTML file starts. */
+navigate("dashboard");
+</script>
+
+</body>
+</html>
